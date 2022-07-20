@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { useParams } from "react-router-dom";
+import { withRouter } from "./test";
 
 export default class Room extends Component {
   constructor(props) {
@@ -9,26 +10,7 @@ export default class Room extends Component {
       guestsCanPause: false,
       isHost: false,
     };
-    console.log(this.props.match.params.roomCode);
-    // this.roomCode = this.getroomCode();
-    // console.log(this.roomCode);
-    // this.getRoomDetails();
-  }
-//   getroomCode() {
-//     console.log(useParams().roomCode);
-//     return useParams().roomCode;
-//   }
-
-  getRoomDetails() {
-    fetch("/api/get-room" + "?code=" + this.roomCode)
-      .then((response) => response.json())
-      .then((data) => {
-        this.setState({
-          votesToSkip: data.votes_to_skip,
-          guestCanPause: data.guest_can_pause,
-          isHost: data.is_host,
-        });
-      });
+    console.log("Hello");
   }
   render() {
     return (
