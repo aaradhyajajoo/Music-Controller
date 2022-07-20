@@ -2,15 +2,16 @@ import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
+import { TextField } from "@material-ui/core";
+import { FormHelperText } from "@material-ui/core";
+import { FormControl } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { Radio } from "@material-ui/core";
+import { RadioGroup } from "@material-ui/core";
+import { FormControlLabel } from "@material-ui/core";
+import { withRouter } from "./withRouter";
 
-export default class CreateRoomPage extends Component {
+class CreateRoomPage extends Component {
   defaultVotes = 2;
 
   constructor(props) {
@@ -19,10 +20,9 @@ export default class CreateRoomPage extends Component {
       guestCanPause: true,
       votesToSkip: this.defaultVotes,
     };
-
     this.handleRoomButtonPressed = this.handleRoomButtonPressed.bind(this);
-    this.handleVotesChange = this.handleVotesChange.bind(this);
     this.handleGuestCanPauseChange = this.handleGuestCanPauseChange.bind(this);
+    this.handleVotesChange = this.handleVotesChange.bind(this);
   }
 
   handleVotesChange(e) {
@@ -30,13 +30,11 @@ export default class CreateRoomPage extends Component {
       votesToSkip: e.target.value,
     });
   }
-
   handleGuestCanPauseChange(e) {
     this.setState({
       guestCanPause: e.target.value === "true" ? true : false,
     });
   }
-
   handleRoomButtonPressed() {
     const requestOptions = {
       method: "POST",
@@ -48,7 +46,7 @@ export default class CreateRoomPage extends Component {
     };
     fetch("/api/create-room", requestOptions)
       .then((response) => response.json())
-      .then((data) => this.props.history.push("/room/" + data.code));
+      .then((data) => this.props.navigate("/room/" + data.code));
   }
 
   render() {
@@ -89,15 +87,12 @@ export default class CreateRoomPage extends Component {
             <TextField
               required={true}
               type="number"
-              onChange={this.handleVotesChange}
               defaultValue={this.defaultVotes}
-              inputProps={{
-                min: 1,
-                style: { textAlign: "center" },
-              }}
+              inputProps={{ min: 1, style: { textAlign: "center" } }}
+              onChange={this.handleVotesChange}
             />
             <FormHelperText component="div">
-              <div align="center">Votes Required To Skip Song</div>
+              <div align="center">Votes required to skip song</div>
             </FormHelperText>
           </FormControl>
         </Grid>
@@ -107,7 +102,7 @@ export default class CreateRoomPage extends Component {
             variant="contained"
             onClick={this.handleRoomButtonPressed}
           >
-            Create A Room
+            Create a Room
           </Button>
         </Grid>
         <Grid item xs={12} align="center">
@@ -119,3 +114,5 @@ export default class CreateRoomPage extends Component {
     );
   }
 }
+
+export default withRouter(CreateRoomPage);
