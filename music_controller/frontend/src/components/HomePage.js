@@ -9,7 +9,8 @@ import {
   Routes,
   Route,
   Link,
-  Redirect,
+  // Redirect,
+  Navigate,
 } from "react-router-dom";
 
 export default class HomePage extends Component {
@@ -56,7 +57,17 @@ export default class HomePage extends Component {
     return (
       <Router>
         <Routes>
-          <Route exact path="/" element={this.renderHomePage()} Route />
+          <Route
+            exact
+            path="/"
+            element={
+              this.state.roomCode ? (
+                <Navigate to={`/room/${this.state.roomCode}`} replace />
+              ) : (
+                this.renderHomePage()
+              )
+            }
+          />
           <Route path="/join" element={<RoomJoinPage />} />
           <Route path="/create" element={<CreateRoomPage />} />
           <Route path="/room/:roomCode" element={<Room />} />
