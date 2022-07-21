@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import { TextField, Button, Grid, Typography } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
-export default class RoomJoinPage extends Component {
+const withRouter = (WrappedComponent) => (props) => {
+  const navigate = useNavigate();
+  return <WrappedComponent {...props} {...{ navigate }} />;
+};
+
+class RoomJoinPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -68,7 +72,7 @@ export default class RoomJoinPage extends Component {
     fetch("/api/join-room", requestOptions)
       .then((response) => {
         if (response.ok) {
-          // useNavigate(`/room/${this.state.roomCode}`);
+          this.props.navigate("/room/" + this.state.roomCode);
         } else {
           this.setState({ error: "Room not found." });
         }
@@ -78,3 +82,5 @@ export default class RoomJoinPage extends Component {
       });
   }
 }
+
+export default withRouter(RoomJoinPage);
