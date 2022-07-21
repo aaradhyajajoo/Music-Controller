@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { useParams } from "react-router-dom";
+import { Grid, Button, Typography } from "@material-ui/core";
 
 function withHook(Component) {
   return function WrappedComponent(props) {
@@ -36,12 +37,37 @@ class Room extends Component {
 
   render() {
     return (
-      <div>
-        <h3>{this.roomCode}</h3>
-        <p>Votes: {this.state.votesToSkip}</p>
-        <p>Guests Can Pause: {this.state.guestsCanPause.toString()}</p>
-        <p>Host: {this.state.isHost.toString()}</p>
-      </div>
+      <Grid container spacing={1}>
+        <Grid item xs={12} align="center">
+          <Typography variant="h4" component="h4">
+            Code: {this.roomCode}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Typography variant="h6" component="h6">
+            Votes: {this.state.votesToSkip}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Typography variant="h6" component="h6">
+            Guests Can Pause: {this.state.guestsCanPause.toString()}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Typography variant="h6" component="h6">
+            Host: {this.state.isHost.toString()}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Button
+            variant="contained"
+            color="secondary"
+            // onClick={this.leaveButtonPressed}
+          >
+            Leave Room
+          </Button>
+        </Grid>
+      </Grid>
     );
   }
 }
