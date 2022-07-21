@@ -15,6 +15,19 @@ import {
 export default class HomePage extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      roomCode: null,
+    };
+  }
+
+  async componentDidMount() {
+    fetch("/api/user-in-room")
+      .then((response) => response.json())
+      .then((data) => {
+        this.setState({
+          roomCode: data.code,
+        });
+      });
   }
 
   renderHomePage() {
