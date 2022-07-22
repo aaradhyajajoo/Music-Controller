@@ -1,13 +1,14 @@
 import React, { Component } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Grid, Button, Typography } from "@material-ui/core";
 
 function withHook(Component) {
   return function WrappedComponent(props) {
     const params = useParams();
+    const navigate = useNavigate();
     // assuming :id is what you have on the route
     var roomCode = params.roomCode;
-    return <Room {...props} roomCode={params.roomCode} />;
+    return <Room {...props} roomCode={params.roomCode} {...{ navigate }} />;
   };
 }
 
@@ -21,6 +22,7 @@ class Room extends Component {
     };
     this.roomCode = props.roomCode;
     this.getRoomDetails(this.roomCode);
+    this.leaveButtonPressed = this.leaveButtonPressed.bind(this);
   }
 
   getRoomDetails() {
@@ -33,6 +35,17 @@ class Room extends Component {
           isHost: data.is_host,
         });
       });
+  }
+
+  leaveButtonPressed() {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    };
+    fetch("/api/leave-room", requestOptions).then((_response) => {
+      // this.props.leaveRoomCallback();
+      this.props.navigate("/");
+    });
   }
 
   render() {
@@ -50,19 +63,19 @@ class Room extends Component {
         </Grid>
         <Grid item xs={12} align="center">
           <Typography variant="h6" component="h6">
-            Guests Can Pause: {this.state.guestsCanPause.toString()}
+            Guests Can Pause: {this.state.guestsCanPause ? "Yes" : "No"}
           </Typography>
         </Grid>
         <Grid item xs={12} align="center">
           <Typography variant="h6" component="h6">
-            Host: {this.state.isHost.toString()}
+            Host: {this.state.isHost ? "Yes" : "No"}
           </Typography>
         </Grid>
         <Grid item xs={12} align="center">
           <Button
             variant="contained"
             color="secondary"
-            // onClick={this.leaveButtonPressed}
+            onClick={this.leaveButtonPressed}
           >
             Leave Room
           </Button>
