@@ -13,9 +13,9 @@ How to implement updates:
 
 1. If making updates to the frontend, simply apply the updates and refresh the localhost website
 2. If making updates to the backend, close the server by hitting CTRL+C, and the type the following:
-  1. "python manage.py makemigrations"
-  2. "python manage.py migrate"
-  3. "python manage.py runserver"
+  "python manage.py makemigrations"
+  "python manage.py migrate"
+  "python manage.py runserver"
 3. Refresh the website to see updates
 4. If updates are not visible, do a hard refresh, or an empty cache and hard refresh
 
