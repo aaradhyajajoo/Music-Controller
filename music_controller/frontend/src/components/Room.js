@@ -35,7 +35,7 @@ class Room extends Component {
       .then((data) => {
         this.setState({
           votesToSkip: data.votes_to_skip,
-          guestCanPause: data.guest_can_pause,
+          guestsCanPause: data.guest_can_pause,
           isHost: data.is_host,
         });
       });
