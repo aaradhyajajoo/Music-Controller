@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Grid, Button, Typography } from "@material-ui/core";
+import CreateRoomPage from "./CreateRoomPage";
 
 function withHook(Component) {
   return function WrappedComponent(props) {
@@ -17,10 +18,14 @@ class Room extends Component {
       votesToSkip: 2,
       guestsCanPause: false,
       isHost: false,
+      showSettings: false,
     };
     this.roomCode = props.roomCode;
     this.getRoomDetails(this.roomCode);
     this.leaveButtonPressed = this.leaveButtonPressed.bind(this);
+    this.updateShowSettings = this.updateShowSettings.bind(this);
+    this.renderSettingsButton = this.renderSettingsButton.bind(this);
+    this.renderSettings = this.renderSettings.bind(this);
   }
 
   getRoomDetails() {
@@ -52,7 +57,55 @@ class Room extends Component {
     });
   }
 
+  updateShowSettings(value) {
+    this.setState({
+      showSettings: value,
+    });
+  }
+
+  renderSettings() {
+    return (
+      <Grid container spacing={1}>
+        <Grid item xs={12} align="center">
+          <CreateRoomPage
+            update={true}
+            votesToSkip={this.state.votesToSkip}
+            guestCanPause={this.state.guestCanPause}
+            roomCode={this.roomCode}
+            updateCallback={() => {}}
+          />
+        </Grid>
+        <Grid item xs={12} align="center">
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => this.updateShowSettings(false)}
+          >
+            Close
+          </Button>
+        </Grid>
+      </Grid>
+    );
+  }
+
+  renderSettingsButton() {
+    return (
+      <Grid item xs={12} align="center">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => this.updateShowSettings(true)}
+        >
+          Settings
+        </Button>
+      </Grid>
+    );
+  }
+
   render() {
+    if (this.state.showSettings){
+      return this.renderSettings();
+    }
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} align="center">
@@ -75,6 +128,7 @@ class Room extends Component {
             Host: {this.state.isHost.toString()}
           </Typography>
         </Grid>
+        {this.state.isHost ? this.renderSettingsButton() : null}
         <Grid item xs={12} align="center">
           <Button
             variant="contained"
