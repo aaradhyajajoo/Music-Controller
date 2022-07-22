@@ -1,11 +1,10 @@
-from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework import generics, status
 from .serializers import RoomSerializer, CreateRoomSerializer, UpdateRoomSerializer
 from .models import Room
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -31,6 +30,7 @@ class GetRoom(APIView):
 
         return Response({'Bad Request': 'Code paramater not found in request'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class JoinRoom(APIView):
     lookup_url_kwarg = 'code'
 
@@ -49,6 +49,7 @@ class JoinRoom(APIView):
             return Response({'Bad Request': 'Invalid Room Code'}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'Bad Request': 'Invalid post data, did not find a code key'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class CreateRoomView(APIView):
     serializer_class = CreateRoomSerializer
@@ -79,14 +80,17 @@ class CreateRoomView(APIView):
 
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class userInRoom(APIView):
     def get(self, request, format=None):
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
+
         data = {
-            "code" : self.request.session.get('room_code') 
+            'code': self.request.session.get('room_code')
         }
         return JsonResponse(data, status=status.HTTP_200_OK)
+
 
 class LeaveRoom(APIView):
     def post(self, request, format=None):
@@ -98,7 +102,8 @@ class LeaveRoom(APIView):
                 room = room_results[0]
                 room.delete()
 
-        return Response({'Message': 'Success'}, status=status.HTTP_200_OK)        
+        return Response({'Message': 'Success'}, status=status.HTTP_200_OK)
+
 
 class UpdateRoom(APIView):
     serializer_class = UpdateRoomSerializer

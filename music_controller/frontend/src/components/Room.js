@@ -16,7 +16,7 @@ class Room extends Component {
     super(props);
     this.state = {
       votesToSkip: 2,
-      guestsCanPause: false,
+      guestCanPause: false,
       isHost: false,
       showSettings: false,
     };
@@ -26,6 +26,7 @@ class Room extends Component {
     this.updateShowSettings = this.updateShowSettings.bind(this);
     this.renderSettingsButton = this.renderSettingsButton.bind(this);
     this.renderSettings = this.renderSettings.bind(this);
+    this.getRoomDetails = this.getRoomDetails.bind(this);
   }
 
   getRoomDetails() {
@@ -40,7 +41,7 @@ class Room extends Component {
       .then((data) => {
         this.setState({
           votesToSkip: data.votes_to_skip,
-          guestsCanPause: data.guest_can_pause,
+          guestCanPause: data.guest_can_pause,
           isHost: data.is_host,
         });
       });
@@ -72,7 +73,7 @@ class Room extends Component {
             votesToSkip={this.state.votesToSkip}
             guestCanPause={this.state.guestCanPause}
             roomCode={this.roomCode}
-            updateCallback={() => {}}
+            updateCallback={this.getRoomDetails}
           />
         </Grid>
         <Grid item xs={12} align="center">
@@ -103,7 +104,7 @@ class Room extends Component {
   }
 
   render() {
-    if (this.state.showSettings){
+    if (this.state.showSettings) {
       return this.renderSettings();
     }
     return (
@@ -120,7 +121,7 @@ class Room extends Component {
         </Grid>
         <Grid item xs={12} align="center">
           <Typography variant="h6" component="h6">
-            Guests Can Pause: {this.state.guestsCanPause.toString()}
+            Guests Can Pause: {this.state.guestCanPause.toString()}
           </Typography>
         </Grid>
         <Grid item xs={12} align="center">
