@@ -6,8 +6,6 @@ function withHook(Component) {
   return function WrappedComponent(props) {
     const params = useParams();
     const navigate = useNavigate();
-    // assuming :id is what you have on the route
-    var roomCode = params.roomCode;
     return <Room {...props} roomCode={params.roomCode} {...{ navigate }} />;
   };
 }
@@ -26,8 +24,14 @@ class Room extends Component {
   }
 
   getRoomDetails() {
-    fetch("/api/get-room" + "?code=" + this.roomCode)
-      .then((response) => response.json())
+    return fetch("/api/get-room" + "?code=" + this.roomCode)
+      .then((response) => {
+        if (!response.ok) {
+          this.props.leaveRoomCallback();
+          this.props.navigate("/");
+        }
+        return response.json();
+      })
       .then((data) => {
         this.setState({
           votesToSkip: data.votes_to_skip,
@@ -43,7 +47,7 @@ class Room extends Component {
       headers: { "Content-Type": "application/json" },
     };
     fetch("/api/leave-room", requestOptions).then((_response) => {
-      // this.props.leaveRoomCallback();
+      this.props.leaveRoomCallback();
       this.props.navigate("/");
     });
   }
@@ -63,12 +67,12 @@ class Room extends Component {
         </Grid>
         <Grid item xs={12} align="center">
           <Typography variant="h6" component="h6">
-            Guests Can Pause: {this.state.guestsCanPause ? "Yes" : "No"}
+            Guests Can Pause: {this.state.guestsCanPause.toString()}
           </Typography>
         </Grid>
         <Grid item xs={12} align="center">
           <Typography variant="h6" component="h6">
-            Host: {this.state.isHost ? "Yes" : "No"}
+            Host: {this.state.isHost.toString()}
           </Typography>
         </Grid>
         <Grid item xs={12} align="center">
